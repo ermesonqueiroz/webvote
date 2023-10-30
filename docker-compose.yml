@@ -1,0 +1,9 @@
+version: '3'
+services:
+    socketi:
+        container_name: 'socketi'
+        ports:
+            - '6001:6001'
+        expose:
+            - 6001
+        image: quay.io/soketi/soketi:latest-16-alpine
