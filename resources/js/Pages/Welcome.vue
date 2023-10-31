@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Option } from "@/types";
 import { router } from "@inertiajs/vue3";
-import {ref} from "vue";
+import { ref, onMounted } from "vue";
 
 const props = defineProps<{
     firstOption: Option;
@@ -17,14 +17,17 @@ function handleVote(option: Option) {
     });
 }
 
-Object.values(props).forEach((option: Option) => {
-    window.Echo.private(`options.${option.id}`)
-        .listen('VoteProcessed', ({ id, votes_amount }: Option) => {
-            console.log(votes_amount)
-            if (id == 1) firstOptionVotesAmount.value = votes_amount
-            else if (id == 2) secondOptionVotesAmount.value = votes_amount
-        });
+onMounted(() => {
+    Object.values(props).forEach((option: Option) => {
+        window.Echo.channel(`options.${option.id}`)
+            .listen('VoteProcessed', (a) => {
+                console.log(a)
+            })
+
+        console.log(window.Echo.channel(`options.${option.id}`).notification((a) => console.log(a)))
+    });
 });
+
 
 </script>
 

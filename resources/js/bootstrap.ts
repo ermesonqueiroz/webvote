@@ -5,14 +5,7 @@ import Pusher from 'pusher-js';
 window.axios = axios;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-const client = new Pusher(import.meta.env.VITE_PUSHER_APP_KEY, {
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-    wsHost: '172.20.0.2',
-    wsPort: 6001,
-    forceTLS: false,
-    disableStats: true,
-    enabledTransports: ['ws', 'wss']
-});
+window.Pusher = Pusher;
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
@@ -22,6 +15,7 @@ window.Echo = new Echo({
     wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,
     wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
     forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
+    encrypted: true,
+    disableStats: true,
     enabledTransports: ['ws', 'wss'],
-    client
 });
